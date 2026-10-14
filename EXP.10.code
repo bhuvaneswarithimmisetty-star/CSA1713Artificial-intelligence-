@@ -1,0 +1,35 @@
+from itertools import permutations
+
+def tsp(cost):
+    n = len(cost)
+    cities = range(1, n)
+
+    min_cost = float('inf')
+    best_route = None
+
+    for perm in permutations(cities):
+        route = (0,) + perm + (0,)
+        total = 0
+
+        for i in range(len(route) - 1):
+            total += cost[route[i]][route[i + 1]]
+
+        if total < min_cost:
+            min_cost = total
+            best_route = route
+
+    return best_route, min_cost
+
+
+# Cost matrix
+cost = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+route, min_cost = tsp(cost)
+
+print("Shortest Route:", " -> ".join(str(x + 1) for x in route))
+print("Minimum Cost:", min_cost)
