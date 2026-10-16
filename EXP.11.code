@@ -1,0 +1,72 @@
+# Map Coloring Problem using CSP (Constraint Satisfaction Problem)
+
+# Variables (regions)
+regions = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+
+# Domain (available colors)
+colors = ['Red', 'Green', 'Blue']
+
+# Adjacency constraints
+neighbors = {
+    'WA':  ['NT', 'SA'],
+    'NT':  ['WA', 'SA', 'Q'],
+    'SA':  ['WA', 'NT', 'Q', 'NSW', 'V'],
+    'Q':   ['NT', 'SA', 'NSW'],
+    'NSW': ['Q', 'SA', 'V'],
+    'V':   ['SA', 'NSW'],
+    'T':   []
+}
+
+
+# Check whether assigning a color to a region is valid
+def is_valid(region, color, assignment):
+    for neighbor in neighbors[region]:
+        # Adjacent regions cannot have the same color
+        if neighbor in assignment and assignment[neighbor] == color:
+            return False
+    return True
+
+
+# Backtracking algorithm for solving CSP
+def backtrack(assignment):
+    # If all regions are assigned, solution is complete
+    if len(assignment) == len(regions):
+        return assignment
+
+    # Select an unassigned region
+    for region in regions:
+        if region not in assignment:
+            current_region = region
+            break
+
+    # Try each color
+    for color in colors:
+        if is_valid(current_region, color, assignment):
+
+            # Assign color
+            assignment[current_region] = color
+
+            # Recursively continue
+            result = backtrack(assignment)
+
+            if result is not None:
+                return result
+
+            # Backtrack
+            del assignment[current_region]
+
+    return None
+
+
+# Start with an empty assignment
+solution = backtrack({})
+
+# Display the result
+if solution:
+    print("Map Coloring Solution:")
+    print("----------------------")
+
+    for region in regions:
+        print(f"{region} -> {solution[region]}")
+else:
+    print("No solution exists.")
