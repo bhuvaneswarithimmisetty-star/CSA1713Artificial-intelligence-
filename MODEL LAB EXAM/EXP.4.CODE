@@ -1,0 +1,22 @@
+
+% Facts
+human(ravi).
+human(raju).
+human(sita).
+
+mortal(X) :-
+    human(X).
+
+student(ravi).
+student(sita).
+
+intelligent(X) :-
+    student(X).
+
+% Inference Engine
+prove(Query) :-
+    call(Query),
+    write('Query is Proved!'), nl.
+
+prove(_) :-
+    write('Query Cannot Be Proved!'), nl.
